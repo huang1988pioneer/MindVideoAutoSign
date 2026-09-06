@@ -33,7 +33,9 @@ internal static class Program
 
         try
         {
+            WriteCrashLog("Main", "starting lifetime");
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+            WriteCrashLog("Main", "lifetime returned");
         }
         catch (Exception ex)
         {

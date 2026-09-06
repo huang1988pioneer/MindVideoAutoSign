@@ -17,7 +17,9 @@ public partial class App : Application
         {
             try
             {
+                desktop.ShutdownMode = Avalonia.Controls.ShutdownMode.OnMainWindowClose;
                 desktop.MainWindow = new MainWindow();
+                WriteStartupNote($"MainWindow created: {desktop.MainWindow.Title}");
             }
             catch (Exception ex)
             {
@@ -82,7 +84,7 @@ public partial class App : Application
         };
     }
 
-    private static void WriteStartupFailure(Exception ex)
+    private static void WriteStartupNote(string message)
     {
         try
         {
@@ -91,14 +93,18 @@ public partial class App : Application
                 "MindVideo Auto Sign",
                 "logs");
             Directory.CreateDirectory(folder);
-            var path = Path.Combine(folder, "startup-crash.log");
             File.AppendAllText(
-                path,
-                $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] MainWindow ctor{Environment.NewLine}{ex}{Environment.NewLine}{Environment.NewLine}");
+                Path.Combine(folder, "startup-crash.log"),
+                $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {message}{Environment.NewLine}");
         }
         catch
         {
             // ignore
         }
+    }
+
+    private static void WriteStartupFailure(Exception ex)
+    {
+        WriteStartupNote($"MainWindow ctor{Environment.NewLine}{ex}{Environment.NewLine}");
     }
 }

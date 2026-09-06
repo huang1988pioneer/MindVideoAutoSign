@@ -48,6 +48,24 @@ public partial class MainWindow : Window
             _ = LoadLocalTokensAsync();
             UpdateAccountDisplay();
             LoadCachedStreakDashboard();
+            Opened += (_, _) =>
+            {
+                try
+                {
+                    var folder = Path.Combine(
+                        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                        "MindVideo Auto Sign",
+                        "logs");
+                    Directory.CreateDirectory(folder);
+                    File.AppendAllText(
+                        Path.Combine(folder, "startup-crash.log"),
+                        $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] MainWindow opened{Environment.NewLine}");
+                }
+                catch
+                {
+                    // ignore
+                }
+            };
         }
         catch (Exception ex)
         {
